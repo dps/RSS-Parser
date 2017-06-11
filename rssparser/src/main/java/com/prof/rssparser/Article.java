@@ -32,6 +32,13 @@ public class Article {
     private String content;
     private String image;
 
+    public class Enclosure {
+        public String url;
+        public String mimeType;
+        public String length;
+    }
+    private Enclosure enclosure;
+
     public String getTitle() {
 
         return title;
@@ -74,6 +81,10 @@ public class Article {
 
     }
 
+    public Enclosure getEnclosure() {
+        return enclosure;
+    }
+
     public void setTitle(String title) {
 
         this.title = title;
@@ -114,6 +125,13 @@ public class Article {
 
         this.image = image;
 
+    }
+
+    public void setEnclosure(String length, String url, String type) {
+        this.enclosure = new Enclosure();
+        this.enclosure.length = length;
+        this.enclosure.url = url;
+        this.enclosure.mimeType = type;
     }
 
     @Override

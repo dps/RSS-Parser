@@ -122,6 +122,24 @@ public class XMLParser extends Observable {
                        @SuppressWarnings("deprecation")
                        Date pubDate = new Date(xmlPullParser.nextText());
                        currentArticle.setPubDate(pubDate);
+                   }  else if (xmlPullParser.getName().equalsIgnoreCase("enclosure")) {
+
+                       String length = null;
+                       String url = null;
+                       String mimeType = null;
+                       for (int i = 0; i < xmlPullParser.getAttributeCount(); i++) {
+                           String attrName = xmlPullParser.getAttributeName(i);
+                           if (attrName.equals("length")) {
+                               length = xmlPullParser.getAttributeValue(i);
+                           } else if (attrName.equals("url")) {
+                               url = xmlPullParser.getAttributeValue(i);
+                           } else if (attrName.equals("type")) {
+                               mimeType = xmlPullParser.getAttributeValue(i);
+                           }
+                       }
+
+
+                       currentArticle.setEnclosure(length, url, mimeType);
                    }
 
                } else if (eventType == XmlPullParser.END_TAG && xmlPullParser.getName().equalsIgnoreCase("item")) {
