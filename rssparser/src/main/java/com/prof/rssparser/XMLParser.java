@@ -36,11 +36,13 @@ public class XMLParser extends Observable {
 
     private ArrayList<Article> articles;
     Article currentArticle;
+    Article feedDetails;
 
     public XMLParser() {
 
         articles = new ArrayList<>();
         currentArticle = new Article();
+        feedDetails = new Article();
     }
 
     public void parseXML (String xml) {
@@ -65,19 +67,21 @@ public class XMLParser extends Observable {
                        insideItem = true;
 
                    } else if (xmlPullParser.getName().equalsIgnoreCase("title")) {
+                       String title = xmlPullParser.nextText();
 
                        if (insideItem) {
-
-                           String title = xmlPullParser.nextText();
                            currentArticle.setTitle(title);
+                       } else {
+                           feedDetails.setTitle(title);
                        }
 
                    } else if (xmlPullParser.getName().equalsIgnoreCase("link")) {
+                       String link = xmlPullParser.nextText();
 
                        if (insideItem) {
-
-                           String link = xmlPullParser.nextText();
                            currentArticle.setLink(link);
+                       } else {
+                           feedDetails.setLink(link);
                        }
 
                    } else if (xmlPullParser.getName().equalsIgnoreCase("dc:creator")) {
@@ -111,10 +115,13 @@ public class XMLParser extends Observable {
 
                    } else if (xmlPullParser.getName().equalsIgnoreCase("description")) {
 
+                       String description = xmlPullParser.nextText();
+
                        if (insideItem) {
 
-                           String description = xmlPullParser.nextText();
                            currentArticle.setDescription(description);
+                       } else {
+                           feedDetails.setDescription(description);
                        }
 
                    } else if (xmlPullParser.getName().equalsIgnoreCase("pubDate")) {
@@ -122,7 +129,7 @@ public class XMLParser extends Observable {
                        @SuppressWarnings("deprecation")
                        Date pubDate = new Date(xmlPullParser.nextText());
                        currentArticle.setPubDate(pubDate);
-                   }  else if (xmlPullParser.getName().equalsIgnoreCase("enclosure")) {
+                   } else if (xmlPullParser.getName().equalsIgnoreCase("enclosure")) {
 
                        String length = null;
                        String url = null;
@@ -140,6 +147,19 @@ public class XMLParser extends Observable {
 
 
                        currentArticle.setEnclosure(length, url, mimeType);
+                   } else if (xmlPullParser.getName().equalsIgnoreCase("itunes:image")) {
+                       String href = null;
+                       for (int i = 0; i < xmlPullParser.getAttributeCount(); i++) {
+                           String attrName = xmlPullParser.getAttributeName(i);
+                           if (attrName.equals("href")) {
+                               href = xmlPullParser.getAttributeValue(i);
+                           }
+                       }
+                       if (insideItem) {
+                           currentArticle.setImage(href);
+                       } else {
+                           feedDetails.setImage(href);
+                       }
                    }
 
                } else if (eventType == XmlPullParser.END_TAG && xmlPullParser.getName().equalsIgnoreCase("item")) {
@@ -151,6 +171,7 @@ public class XMLParser extends Observable {
                eventType = xmlPullParser.next();
            }
 
+           articles.add(0, feedDetails);
            triggerObserver();
 
        } catch (Exception e) {

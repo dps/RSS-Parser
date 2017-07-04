@@ -45,7 +45,7 @@ public class Parser extends AsyncTask<String, Void, String> implements Observer{
     }
 
     public interface OnTaskCompleted{
-        void onTaskCompleted(ArrayList<Article> list);
+        void onTaskCompleted(Article feedDetails, ArrayList<Article> list);
         void onError();
     }
 
@@ -98,7 +98,8 @@ public class Parser extends AsyncTask<String, Void, String> implements Observer{
     public void update(Observable observable, Object data) {
 
         articles = (ArrayList<Article>) data;
-        onComplete.onTaskCompleted(articles);
+        Article feedDetails = ((ArrayList<Article>) data).remove(0);
+        onComplete.onTaskCompleted(feedDetails, articles);
 
     }
 

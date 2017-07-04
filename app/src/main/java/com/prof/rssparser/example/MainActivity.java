@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         parser.onFinish(new Parser.OnTaskCompleted() {
             //what to do when the parsing is done
             @Override
-            public void onTaskCompleted(ArrayList<Article> list) {
+            public void onTaskCompleted(Article feedDetails, ArrayList<Article> list) {
                 //list is an Array List with all article's information
                 //set the adapter to recycler view
                 mAdapter = new ArticleAdapter(list, R.layout.row, MainActivity.this);
