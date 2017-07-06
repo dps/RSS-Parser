@@ -38,6 +38,7 @@ public class Article {
         public String length;
     }
     private Enclosure enclosure;
+    private String duration;
 
     public String getTitle() {
 
@@ -83,6 +84,10 @@ public class Article {
 
     public Enclosure getEnclosure() {
         return enclosure;
+    }
+
+    public String getDuration() {
+        return duration;
     }
 
     public void setTitle(String title) {
@@ -132,6 +137,10 @@ public class Article {
         this.enclosure.length = length;
         this.enclosure.url = url;
         this.enclosure.mimeType = type;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 
     @Override

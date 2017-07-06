@@ -160,6 +160,11 @@ public class XMLParser extends Observable {
                        } else {
                            feedDetails.setImage(href);
                        }
+                   } else if (xmlPullParser.getName().equalsIgnoreCase("itunes:duration")) {
+                       String duration = xmlPullParser.nextText();
+                       if (insideItem) {
+                           currentArticle.setDuration(duration);
+                       }
                    }
 
                } else if (eventType == XmlPullParser.END_TAG && xmlPullParser.getName().equalsIgnoreCase("item")) {
